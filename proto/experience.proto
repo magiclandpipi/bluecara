@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package experience;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/chipo/proto;experiencepb";
+
+// The experience service definition.
+service ExperienceService {
+  // Returns the experience detail based on ID.
+  rpc GetExperienceByID (ExperienceIDRequest) returns (ExperienceDetailResponse) {
+    option (google.api.http) = {
+      get: "/v1/experience/{id}"
+    };
+  }
+
+  // Returns a list of experiences.
+  rpc ListExperiences (ListExperiencesRequest) returns (ListExperiencesResponse) {
+    option (google.api.http) = {
+      get: "/v1/experiences"
+    };
+  }
+
+  // Upserts an experience.
+  rpc UpsertExperience (UpsertExperienceRequest) returns (UpsertExperienceResponse) {
+    option (google.api.http) = {
+      post: "/v1/experience"
+      body: "experience"
+    };
+  }
+}
+
+// Request message for getting experience detail by ID.
+message ExperienceIDRequest {
+  string id = 1;
+}
+
+// Response message for getting experience detail.
+message ExperienceDetailResponse {
+  Experience experience = 1;
+}
+
+// Request message for listing experiences.
+message ListExperiencesRequest {
+  int32 page = 1; // For pagination, if needed
+  int32 size = 2; // For pagination, if needed
+}
+
+// Response message for listing experiences.
+message ListExperiencesResponse {
+  repeated Experience experiences = 1;
+}
+
+// Request message for upserting an experience.
+message UpsertExperienceRequest {
+  Experience experience = 1;
+}
+
+// Response message for upserting an experience.
+message UpsertExperienceResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Experience message defining the experience structure.
+message Experience {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string location = 4;
+  string date = 5;
+  repeated string tags = 6; // Optional field for tags or categories
+}
