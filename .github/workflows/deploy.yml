@@ -1,0 +1,59 @@
+name: Deploy Go Project to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.16'
+
+    - name: Build the Go project
+      run: |
+        go build -o myapp ./...
+
+    - name: Archive the build artifacts
+      run: zip -r myapp.zip myapp
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: myapp
+        path: myapp.zip
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: myapp
+        path: myapp.zip
+
+    - name: Extract build artifacts
+      run: unzip myapp.zip
+
+    - name: Deploy to EC2 via SSH
+      uses: appleboy/ssh-action@v0.1.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          sudo systemctl stop myapp
+          rm -rf /home/ec2-user/myapp
+          mkdir -p /home/ec2-user/myapp
+          mv myapp /home/ec2-user/myapp/
+          sudo systemctl start myapp
