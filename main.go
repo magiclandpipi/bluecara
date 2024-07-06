@@ -6,24 +6,26 @@ import (
     "os"
 
     "github.com/gorilla/mux"
-    "booking-website/database"
-    "booking-website/handlers"
+    "github.com/bluecara/database"
+    "github.com/bluecara/handlers"
+    pb "github.com/bluecara/proto"
     "github.com/joho/godotenv"
+    "google.golang.org/grpc"
+)
+
+const (
+    port = ":50051"
 )
 
 func main() {
-    err := godotenv.Load()
+
+    lis, err := net.Listen("tcp", port)
     if err != nil {
-        log.Fatal("Error loading .env file")
+        log.Fatalf("failed to listen: %v", err)
     }
-
-    database.Connect()
-
-    r := mux.NewRouter()
-    r.HandleFunc("/bookings", handlers.GetBookings).Methods("GET")
-    r.HandleFunc("/booking", handlers.CreateBooking).Methods("POST")
-
-    http.Handle("/", r)
-    log.Println("Starting server on port 8000")
-    log.Fatal(http.ListenAndServe(":8000", nil))
+    s := grpc.NewServer()
+    pb.RegisterExperienceServiceServer(s, &handlers.ExperienceServiceServer{})
+    if err := s.Serve(lis); err != nil {
+        log.Fatalf("failed to serve: %v", err)
+    }
 }

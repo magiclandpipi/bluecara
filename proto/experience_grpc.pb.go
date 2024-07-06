@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
+	ExperienceService_GetHello_FullMethodName          = "/experience.ExperienceService/GetHello"
 	ExperienceService_GetExperienceByID_FullMethodName = "/experience.ExperienceService/GetExperienceByID"
 	ExperienceService_ListExperiences_FullMethodName   = "/experience.ExperienceService/ListExperiences"
 	ExperienceService_UpsertExperience_FullMethodName  = "/experience.ExperienceService/UpsertExperience"
@@ -30,6 +31,7 @@ const (
 //
 // The experience service definition.
 type ExperienceServiceClient interface {
+	GetHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error)
 	// Returns the experience detail based on ID.
 	GetExperienceByID(ctx context.Context, in *ExperienceIDRequest, opts ...grpc.CallOption) (*ExperienceDetailResponse, error)
 	// Returns a list of experiences.
@@ -44,6 +46,16 @@ type experienceServiceClient struct {
 
 func NewExperienceServiceClient(cc grpc.ClientConnInterface) ExperienceServiceClient {
 	return &experienceServiceClient{cc}
+}
+
+func (c *experienceServiceClient) GetHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HelloResponse)
+	err := c.cc.Invoke(ctx, ExperienceService_GetHello_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *experienceServiceClient) GetExperienceByID(ctx context.Context, in *ExperienceIDRequest, opts ...grpc.CallOption) (*ExperienceDetailResponse, error) {
@@ -82,6 +94,7 @@ func (c *experienceServiceClient) UpsertExperience(ctx context.Context, in *Upse
 //
 // The experience service definition.
 type ExperienceServiceServer interface {
+	GetHello(context.Context, *HelloRequest) (*HelloResponse, error)
 	// Returns the experience detail based on ID.
 	GetExperienceByID(context.Context, *ExperienceIDRequest) (*ExperienceDetailResponse, error)
 	// Returns a list of experiences.
@@ -95,6 +108,9 @@ type ExperienceServiceServer interface {
 type UnimplementedExperienceServiceServer struct {
 }
 
+func (UnimplementedExperienceServiceServer) GetHello(context.Context, *HelloRequest) (*HelloResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetHello not implemented")
+}
 func (UnimplementedExperienceServiceServer) GetExperienceByID(context.Context, *ExperienceIDRequest) (*ExperienceDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetExperienceByID not implemented")
 }
@@ -115,6 +131,24 @@ type UnsafeExperienceServiceServer interface {
 
 func RegisterExperienceServiceServer(s grpc.ServiceRegistrar, srv ExperienceServiceServer) {
 	s.RegisterService(&ExperienceService_ServiceDesc, srv)
+}
+
+func _ExperienceService_GetHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HelloRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExperienceServiceServer).GetHello(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ExperienceService_GetHello_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExperienceServiceServer).GetHello(ctx, req.(*HelloRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _ExperienceService_GetExperienceByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -178,6 +212,10 @@ var ExperienceService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "experience.ExperienceService",
 	HandlerType: (*ExperienceServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetHello",
+			Handler:    _ExperienceService_GetHello_Handler,
+		},
 		{
 			MethodName: "GetExperienceByID",
 			Handler:    _ExperienceService_GetExperienceByID_Handler,
