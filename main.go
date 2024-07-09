@@ -6,9 +6,9 @@ import (
     "os"
 
     "github.com/gorilla/mux"
-    "github.com/bluecara/database"
-    "github.com/bluecara/handlers"
-    pb "github.com/bluecara/proto"
+    "github.com/magiclandpipi/bluecara/database"
+    "github.com/magiclandpipi/bluecara/handlers"
+    pb "github.com/magiclandpipi/bluecara/proto"
     "github.com/joho/godotenv"
     "google.golang.org/grpc"
 )

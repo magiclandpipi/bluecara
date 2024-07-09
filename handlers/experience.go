@@ -4,7 +4,7 @@ package handlers
 import (
     "context"
 
-    pb "github.com/bluecara/proto"
+    pb "github.com/magiclandpipi/bluecara/proto"
 )
 
 type ExperienceServiceServer struct {
