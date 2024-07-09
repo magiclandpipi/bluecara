@@ -6,7 +6,6 @@ import (
     "os"
 
     "github.com/gorilla/mux"
-    "github.com/magiclandpipi/bluecara/database"
     "github.com/magiclandpipi/bluecara/handlers"
     pb "github.com/magiclandpipi/bluecara/proto"
     "github.com/joho/godotenv"
