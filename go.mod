@@ -1,4 +1,4 @@
-module chipo
+module bluecara
 
 go 1.22.4
 
