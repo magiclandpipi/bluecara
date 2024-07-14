@@ -55,7 +55,11 @@ jobs:
 
     - name: Extract build artifacts
       run: |
-        unzip build.zip -d build
+        unzip build.zip -d build || echo "Failed to unzip build.zip: $?"
+
+    - name: List extracted files
+      run: |
+        ls -l build
 
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@v0.1.3
