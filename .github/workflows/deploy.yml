@@ -43,6 +43,11 @@ jobs:
         name: build
         path: build.zip
 
+    - name: Print current directory
+      run: |
+        pwd
+        ls -l
+
     - name: List artifacts
       run: |
         ls -l
