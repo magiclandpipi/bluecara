@@ -50,8 +50,7 @@ jobs:
 
     - name: Extract build artifacts
       run: |
-        mkdir -p build
-        unzip build.zip -d build
+        unzip build.zip
 
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@v0.1.3
@@ -63,5 +62,5 @@ jobs:
           sudo systemctl stop myapp
           rm -rf /home/ec2-user/myapp
           mkdir -p /home/ec2-user/myapp
-          mv build/myapp /home/ec2-user/myapp/
+          mv myapp /home/ec2-user/myapp/
           sudo systemctl start myapp
