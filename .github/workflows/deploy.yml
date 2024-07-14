@@ -44,7 +44,9 @@ jobs:
         path: build.zip
 
     - name: Extract build artifacts
-      run: unzip build.zip
+      run: |
+        mkdir -p build
+        unzip build.zip -d build
 
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@v0.1.3
