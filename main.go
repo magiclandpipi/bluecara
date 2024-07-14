@@ -2,6 +2,7 @@ package main
 
 import (
     "log"
+    "net"
     "net/http"
     "os"
 
@@ -17,6 +18,19 @@ const (
 )
 
 func main() {
+    // Initialize Gorilla Mux router
+    router := mux.NewRouter()
+
+    // Test endpoint
+    router.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+        w.Write([]byte("Hello, World!"))
+    }).Methods("GET")
+
+    // Load environment variables
+    err := godotenv.Load()
+    if err != nil {
+        log.Fatalf("Error loading .env file: %v", err)
+    }
 
     lis, err := net.Listen("tcp", port)
     if err != nil {
@@ -27,4 +41,7 @@ func main() {
     if err := s.Serve(lis); err != nil {
         log.Fatalf("failed to serve: %v", err)
     }
+
+    // Start HTTP server
+    log.Fatal(http.ListenAndServe(":8080", router))
 }
