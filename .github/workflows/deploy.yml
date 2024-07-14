@@ -43,6 +43,11 @@ jobs:
         name: build
         path: build.zip
 
+    - name: List artifacts
+      run: |
+        ls -l
+        ls -l build
+
     - name: Extract build artifacts
       run: |
         mkdir -p build
