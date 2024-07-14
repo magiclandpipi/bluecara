@@ -4,7 +4,6 @@ import (
     "log"
     "net"
     "net/http"
-    "os"
 
     "github.com/gorilla/mux"
     "github.com/magiclandpipi/bluecara/handlers"
