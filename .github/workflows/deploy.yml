@@ -48,9 +48,13 @@ jobs:
         pwd
         ls -l
 
+    - name: List downloaded artifacts
+      run: |
+        ls -l build.zip
+
     - name: Extract build artifacts
       run: |
-        unzip build.zip -d build || echo "Failed to unzip build.zip: $?"
+        unzip -o build.zip -d ./build || echo "Failed to unzip build.zip: $?"
 
     - name: List extracted files
       run: |
