@@ -52,6 +52,14 @@ jobs:
       run: |
         ls -l build.zip
 
+    - name: Verify current directory and file existence
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Contents of current directory:"
+        ls -l
+        echo "Attempting to unzip build.zip"
+        unzip -l build.zip
+
     - name: Extract build artifacts
       run: |
         unzip -o build.zip -d ./build || echo "Failed to unzip build.zip: $?"
