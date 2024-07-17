@@ -41,7 +41,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: build
-        path: build.zip
+        path: .
 
     - name: Print current directory
       run: |
@@ -55,6 +55,10 @@ jobs:
 
     - name: Rename build.zip to avoid conflicts
       run: |
+        if [ -d "build.zip" ]; then
+          echo "Error: build.zip is a directory, expected a file."
+          exit 1
+        fi
         mv build.zip downloaded_build.zip
         ls -l downloaded_build.zip
         file downloaded_build.zip
@@ -69,6 +73,7 @@ jobs:
           echo "File downloaded_build.zip exists."
         else
           echo "File downloaded_build.zip does not exist."
+          exit 1
         fi
         file downloaded_build.zip
         unzip -l downloaded_build.zip
