@@ -58,11 +58,17 @@ jobs:
         echo "Contents of current directory:"
         ls -l
         echo "Attempting to unzip build.zip"
+        if [ -f "build.zip" ]; then
+          echo "File build.zip exists."
+        else
+          echo "File build.zip does not exist."
+        fi
+        file build.zip
         unzip -l build.zip
 
     - name: Extract build artifacts
       run: |
-        unzip -o build.zip -d ./build || echo "Failed to unzip build.zip: $?"
+        unzip -o $(pwd)/build.zip -d $(pwd)/build || echo "Failed to unzip build.zip: $?"
 
     - name: List extracted files
       run: |
