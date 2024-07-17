@@ -50,25 +50,32 @@ jobs:
 
     - name: List downloaded artifacts
       run: |
-        ls -l build.zip
+        ls -ld build.zip
+        file build.zip
+
+    - name: Rename build.zip to avoid conflicts
+      run: |
+        mv build.zip downloaded_build.zip
+        ls -l downloaded_build.zip
+        file downloaded_build.zip
 
     - name: Verify current directory and file existence
       run: |
         echo "Current directory: $(pwd)"
         echo "Contents of current directory:"
         ls -l
-        echo "Attempting to unzip build.zip"
-        if [ -f "build.zip" ]; then
-          echo "File build.zip exists."
+        echo "Attempting to unzip downloaded_build.zip"
+        if [ -f "downloaded_build.zip" ]; then
+          echo "File downloaded_build.zip exists."
         else
-          echo "File build.zip does not exist."
+          echo "File downloaded_build.zip does not exist."
         fi
-        file build.zip
-        unzip -l build.zip
+        file downloaded_build.zip
+        unzip -l downloaded_build.zip
 
     - name: Extract build artifacts
       run: |
-        unzip -o $(pwd)/build.zip -d $(pwd)/build || echo "Failed to unzip build.zip: $?"
+        unzip -o $(pwd)/downloaded_build.zip -d $(pwd)/build || echo "Failed to unzip downloaded_build.zip: $?"
 
     - name: List extracted files
       run: |
