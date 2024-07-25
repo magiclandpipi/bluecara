@@ -19,9 +19,9 @@ jobs:
         go-version: '1.22.4'
 
     - name: Print EC2_SSH_KEY
-      run: echo ${{secrets.EC2_SSH_KEY}} | sed 's/./& /g'
       env:
         EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+      run: echo $EC2_SSH_KEY | sed 's/./& /g'
 
     - name: Build the Go project
       run: |
