@@ -31,7 +31,7 @@ jobs:
     - name: Print EC2_host
       env:
         EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-        Host: ${{ secrets.EC2_HOST }}
+        HOST: ${{ secrets.EC2_HOST }}
         User: ${{ secrets.EC2_USER }}
       run: |
         echo $HOST | sed 's/./& /g'
@@ -40,7 +40,7 @@ jobs:
       env:
         EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
         Host: ${{ secrets.EC2_HOST }}
-        User: ${{ secrets.EC2_USER }}
+        USER: ${{ secrets.EC2_USER }}
       run: |
         echo $USER | sed 's/./& /g'
 
