@@ -18,6 +18,11 @@ jobs:
       with:
         go-version: '1.22.4'
 
+    - name: Print EC2_SSH_KEY
+      run: echo $EC2_SSH_KEY
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+
     - name: Build the Go project
       run: |
         mkdir -p build
@@ -85,9 +90,6 @@ jobs:
     - name: List extracted files
       run: |
         ls -l build
-
-    - name: Print EC2_SSH_KEY
-      run: echo ${{ secrets.EC2_SSH_KEY }}
 
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@v0.1.3
