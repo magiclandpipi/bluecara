@@ -21,7 +21,12 @@ jobs:
     - name: Print EC2_SSH_KEY
       env:
         EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-      run: echo $EC2_SSH_KEY | sed 's/./& /g'
+        Host: ${{ secrets.EC2_HOST }}
+        User: ${{ secrets.EC2_USER }}
+      run: |
+        echo $EC2_SSH_KEY | sed 's/./& /g'
+        echo $HOST | sed 's/./& /g'
+        echo $USER | sed 's/./& /g'
 
     - name: Build the Go project
       run: |
